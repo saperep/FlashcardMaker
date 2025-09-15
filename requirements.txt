@@ -1,0 +1,27 @@
+# Extraction PDF
+pymupdf==1.24.9
+pymupdf4llm==0.0.15
+
+# Embeddings et recherche sémantique
+sentence-transformers==3.0.1
+faiss-cpu==1.8.0
+
+# Utils
+numpy==2.0.1
+tqdm==4.66.4
+pydantic==2.8.2
+Pillow==10.4.0
+
+# OCR (option si slides scannées)
+pytesseract==0.3.10
+
+# Génération LLM
+ollama==0.2.1        # si tu veux Ollama local
+openai==1.37.1       # si tu utilises l’API OpenAI
+
+# Export Anki (option)
+genanki==0.13.0
+
+# Dev utils (optionnel)
+black==24.8.0
+ruff==0.5.7
