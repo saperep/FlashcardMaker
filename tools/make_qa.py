@@ -1,49 +1,51 @@
 # tools/make_qa.py
 from __future__ import annotations
-import argparse, hashlib, json, os, re, pathlib
+import argparse, hashlib, json, pathlib, io
 from datetime import datetime
 from typing import List, Dict, Any, Tuple
 
-import fitz
+import fitz  # PyMuPDF
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import faiss
 from tqdm import tqdm
+from PIL import Image
+import pytesseract
 
 # ==== Config ====
 EMB_MODEL = "BAAI/bge-m3"
 CHUNK_WORDS = 400
-TOP_K = 1                  # par chunk on reste focalisé
-USE_OLLAMA = False          # sinon met à False et configure OpenAI en bas
+TOP_K = 1
+USE_OLLAMA = False   # False = utilise OpenAI ; True = utilise Ollama local
 
 # ==== LLM helpers ====
 def call_llm_generate(system_prompt: str, excerpt: str, pages: Tuple[int,int]) -> List[Dict[str, Any]]:
     if USE_OLLAMA:
         import ollama
-        prompt = f"{system_prompt}\n\n### EXTRAI T (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
+        prompt = f"{system_prompt}\n\n### EXTRAIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
         resp = ollama.chat(model="llama3.1:8b-instruct", messages=[{"role":"user","content":prompt}])
         txt = resp["message"]["content"]
     else:
         from openai import OpenAI
         client = OpenAI()
-        prompt = f"{system_prompt}\n\n### EXTR AIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
+        prompt = f"{system_prompt}\n\n### EXTRAIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
         txt = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role":"user","content":prompt}],
             temperature=0.2
         ).choices[0].message.content
-    # tolère JSON “pas parfait”
+
+    # Tolère JSON pas parfait
     try:
         return json.loads(txt)
     except Exception:
-        # tente extraction grossière de structure JSON
         start = txt.find('['); end = txt.rfind(']')
         return json.loads(txt[start:end+1])
 
 def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[str,Any]:
     payload = {"q": q, "excerpt": excerpt}
     if USE_OLLAMA:
-        import ollama, json
+        import ollama
         prompt = f"{critic_prompt}\n\nExtrait:\n{excerpt}\n\nCarte:\n{json.dumps(q,ensure_ascii=False,indent=2)}\n\nRéponds JSON:"
         resp = ollama.chat(model="llama3.1:8b-instruct", messages=[{"role":"user","content":prompt}])
         txt = resp["message"]["content"]
@@ -56,19 +58,34 @@ def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[
             messages=[{"role":"user","content":prompt}],
             temperature=0.0
         ).choices[0].message.content
+
     try:
         return json.loads(txt)
     except Exception:
         start = txt.find('{'); end = txt.rfind('}')
         return json.loads(txt[start:end+1])
 
+# ==== OCR fallback ====
+def page_text_with_ocr(p, dpi=220, lang="eng+fra", min_chars=30) -> str:
+    """Essaie extraction texte native ; sinon OCR avec tesseract."""
+    text = p.get_text("text") or ""
+    if len(text.strip()) >= min_chars:
+        return text.strip()
+
+    # OCR fallback
+    pix = p.get_pixmap(dpi=dpi, alpha=False)
+    img = Image.open(io.BytesIO(pix.tobytes("png")))
+    ocr = pytesseract.image_to_string(img, lang=lang)
+    combo = (text + "\n" + (ocr or "")).strip()
+    return combo
+
 # ==== PDF -> pages ====
 def extract_pages(pdf_path: pathlib.Path) -> List[Dict[str, Any]]:
     doc = fitz.open(pdf_path)
     out = []
     for i, p in enumerate(doc):
-        text = p.get_text("text")
-        out.append({"page": i+1, "text": text})
+        txt = page_text_with_ocr(p)
+        out.append({"page": i+1, "text": txt})
     return out
 
 def chunk_pages(pages: List[Dict[str,Any]], max_words=CHUNK_WORDS):
@@ -91,7 +108,6 @@ class Deduper:
         self.model = SentenceTransformer(EMB_MODEL)
         self.vecs = None
         self.index = None
-        self.qids = []
 
     def _ensure(self):
         if self.index is None:
@@ -154,22 +170,25 @@ def run(pdf_dir: str, out_notes: str, course_name: str):
     deduper = Deduper()
 
     for pdf in sorted(pathlib.Path(pdf_dir).glob("*.pdf")):
+        print(f"[INFO] Processing {pdf.name}")
         pages = extract_pages(pdf)
+        print(f"[INFO] {pdf.name}: pages={len(pages)}, chars_total={sum(len(pg['text']) for pg in pages)}")
         chunks = chunk_pages(pages)
+        print(f"[INFO] {pdf.name}: chunks={len(chunks)}")
 
         all_cards = []
         for ch in tqdm(chunks, desc=f"Gen {pdf.name}"):
             raw = call_llm_generate(system_prompt, ch["text"], ch["pages"])
-            # critic + filtre + dédup
             for q in raw:
                 qc = call_llm_critic(critic_prompt, q, ch["text"])
                 keep = qc.get("keep", True)
-                if not keep and qc.get("fix"):  # si réparable
+                if not keep and qc.get("fix"):
                     q = json.loads(qc["fix"])
                 if keep and not deduper.is_duplicate(q.get("question","")):
                     q["pages"] = list(range(ch["pages"][0], ch["pages"][1]+1))
                     all_cards.append(q)
 
+        print(f"[INFO] {pdf.name}: generated {len(all_cards)} cards")
         write_markdown(
             pathlib.Path(out_notes) / f"{pdf.stem}_flashcards.md",
             header={"course": course_name, "source": f"data/pdf/{pdf.name}"},
