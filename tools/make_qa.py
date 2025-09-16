@@ -147,25 +147,51 @@ generated_at: "{datetime.now().isoformat(timespec='seconds')}"
 ---
 
 # Flashcards – {header['course']}
+
+> Astuce : cliquez pour dérouler la réponse.
 """
         md_path.write_text(head, encoding="utf-8")
 
+    def page_range(pages: list[int]) -> str:
+        if not pages: return ""
+        lo, hi = min(pages), max(pages)
+        return f"p. {lo}" if lo == hi else f"p. {lo}–{hi}"
+
     with md_path.open("a", encoding="utf-8") as f:
         for c in cards:
-            _qid = qid(c)
+            q = c.get("question", "").strip()
+            why = c.get("why", "")
             pages = c.get("pages", [])
             src = f"{header['source']}#p={pages[0]}-{pages[-1]}" if pages else header['source']
-            f.write(f"\n---\n### [QID:{_qid}] (type: {c.get('type','?')}, pages: {pages})\n")
-            f.write(f"**Q.** {c.get('question','')}\n\n")
+            page_label = page_range(pages)
+
+            # On garde le QID en commentaire HTML pour la traçabilité, mais on ne l’affiche pas
+            _qid = qid(c)
+            f.write(f"\n<!-- QID:{_qid} -->\n")
+
+            # Titre (la question) + pages en exposant
+            f.write(f"### {q}  <sup>{page_label}</sup>\n\n")
+
+            # Contenu masqué : réponses, justifications, source, etc.
+            f.write("<details>\n<summary>Afficher la réponse</summary>\n\n")
+
             if c.get("type") == "mcq":
-                for i, ch in enumerate(c.get("choices", []), 1):
-                    f.write(f"{chr(64+i)}) {ch}\n")
-                f.write(f"\n**Réponse :** {c.get('correct','?')}\n")
+                choices = c.get("choices", [])
+                if choices:
+                    f.write("**Choix :**\n\n")
+                    for i, ch in enumerate(choices, 1):
+                        f.write(f"- {chr(64+i)}) {ch}\n")
+                    f.write("\n")
+                f.write(f"**Réponse :** {c.get('correct','?')}\n\n")
             else:
-                f.write(f"**Réponse :** {c.get('answer','')}\n")
-            if c.get("why"):
-                f.write(f"*Pourquoi:* {c['why']}\n")
-            f.write(f"*Source:* {src}\n")
+                f.write(f"**Réponse :** {c.get('answer','')}\n\n")
+
+            if why:
+                f.write(f"**Pourquoi :** {why}\n\n")
+
+            f.write(f"**Source :** `{src}`\n\n")
+            f.write("</details>\n")
+
 
 # ==== Main ====
 def run(pdf_dir: str, out_notes: str, course_name: str):
