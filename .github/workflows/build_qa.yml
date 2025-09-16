@@ -7,37 +7,71 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write   # autorise le bot à pousser les fichiers générés
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           lfs: true
 
-      # S'assurer d'avoir les *vrais* PDFs (pas des pointeurs LFS)
       - name: Ensure LFS files are present
         run: |
           git lfs pull
           git lfs checkout
           git lfs ls-files -l || true
+          echo "PDFs present:"
+          ls -lh data/pdf || true
+          echo
+          echo "Detect LFS pointers (should NOT say POINTER):"
+          (for f in data/pdf/*.pdf; do
+            [ -f "$f" ] || continue
+            head -n 3 "$f" 2>/dev/null | grep -q "git-lfs.github.com" && echo "POINTER: $f" || echo "OK: $f"
+          done) || true
 
-      # Installer Tesseract + packs de langue (eng obligatoire, fra recommandé)
-      - name: Install Tesseract OCR
+      - name: Install Tesseract OCR (eng + fra)
         run: |
           sudo apt-get update
           sudo apt-get install -y tesseract-ocr tesseract-ocr-fra
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install deps (Python)
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml', '**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pymupdf pymupdf4llm sentence-transformers faiss-cpu numpy tqdm openai genanki Pillow pytesseract
+          pip install pymupdf Pillow pytesseract sentence-transformers faiss-cpu numpy tqdm openai genanki pymupdf4llm
+
+      - name: Sanity check OpenAI
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os
+          from openai import OpenAI
+          print("[CHECK] OPENAI_API_KEY present:", bool(os.getenv("OPENAI_API_KEY")))
+          client = OpenAI()
+          r = client.chat.completions.create(
+              model="gpt-4o-mini",
+              messages=[{"role":"user","content":"Say OK"}],
+              temperature=0
+          )
+          print("[CHECK] OpenAI reply:", r.choices[0].message.content.strip())
+          PY
 
       - name: Generate flashcards (OpenAI)
         env:
@@ -48,13 +82,22 @@ jobs:
       - name: Debug listing
         run: |
           echo "Tree after generation:"
-          ls -R
+          ls -R || true
+
+      - name: Upload notes artifact (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: notes
+          path: notes/**/*.md
+          if-no-files-found: ignore
 
       - name: Commit outputs
         run: |
           git config user.name "flashcards-bot"
           git config user.email "bot@users.noreply.github.com"
           mkdir -p notes anki
+          echo "[CI] $(date) – post-gen tree" > notes/BUILD_LOG.md
+          ls -R >> notes/BUILD_LOG.md
           git add -f notes anki || true
           git commit -m "auto: flashcards updated" || echo "nothing to commit"
           git push

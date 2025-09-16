@@ -1,6 +1,6 @@
 # tools/make_qa.py
 from __future__ import annotations
-import argparse, hashlib, json, pathlib, io
+import argparse, hashlib, json, pathlib, io, os, sys
 from datetime import datetime
 from typing import List, Dict, Any, Tuple
 
@@ -15,15 +15,15 @@ import pytesseract
 # ==== Config ====
 EMB_MODEL = "BAAI/bge-m3"
 CHUNK_WORDS = 400
-TOP_K = 1
-USE_OLLAMA = False   # False = utilise OpenAI ; True = utilise Ollama local
+USE_OLLAMA = False   # False = OpenAI (CI recommandé) ; True = Ollama local
 
 # ==== LLM helpers ====
-def call_llm_generate(system_prompt: str, excerpt: str, pages: Tuple[int,int]) -> List[Dict[str, Any]]:
+def call_llm_generate(system_prompt: str, excerpt: str, pages: Tuple[int, int]) -> List[Dict[str, Any]]:
+    """Appelle le LLM (OpenAI par défaut) pour générer une liste de cartes JSON."""
     if USE_OLLAMA:
         import ollama
         prompt = f"{system_prompt}\n\n### EXTRAIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
-        resp = ollama.chat(model="llama3.1:8b-instruct", messages=[{"role":"user","content":prompt}])
+        resp = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])
         txt = resp["message"]["content"]
     else:
         from openai import OpenAI
@@ -35,20 +35,22 @@ def call_llm_generate(system_prompt: str, excerpt: str, pages: Tuple[int,int]) -
             temperature=0.2
         ).choices[0].message.content
 
-    # Tolère JSON pas parfait
+    # Tolérer un JSON imparfait
     try:
         return json.loads(txt)
     except Exception:
         start = txt.find('['); end = txt.rfind(']')
+        if start == -1 or end == -1:
+            print("[WARN] LLM did not return a JSON list. Skipping this chunk.", file=sys.stderr)
+            return []
         return json.loads(txt[start:end+1])
 
 def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[str,Any]:
-    payload = {"q": q, "excerpt": excerpt}
+    """Critique automatique d'une carte pour vérifier répondabilité & clarté."""
     if USE_OLLAMA:
         import ollama
         prompt = f"{critic_prompt}\n\nExtrait:\n{excerpt}\n\nCarte:\n{json.dumps(q,ensure_ascii=False,indent=2)}\n\nRéponds JSON:"
-        resp = ollama.chat(model="llama3.1:8b-instruct", messages=[{"role":"user","content":prompt}])
-        txt = resp["message"]["content"]
+        txt = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])["message"]["content"]
     else:
         from openai import OpenAI
         client = OpenAI()
@@ -63,15 +65,16 @@ def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[
         return json.loads(txt)
     except Exception:
         start = txt.find('{'); end = txt.rfind('}')
+        if start == -1 or end == -1:
+            return {"keep": True}  # on ne bloque pas si la critique est illisible
         return json.loads(txt[start:end+1])
 
 # ==== OCR fallback ====
 def page_text_with_ocr(p, dpi=220, lang="eng+fra", min_chars=30) -> str:
-    """Essaie extraction texte native ; sinon OCR avec tesseract."""
-    text = p.get_text("text") or ""
-    if len(text.strip()) >= min_chars:
-        return text.strip()
-
+    """Essaie extraction texte native ; sinon OCR via Tesseract."""
+    text = (p.get_text("text") or "").strip()
+    if len(text) >= min_chars:
+        return text
     # OCR fallback
     pix = p.get_pixmap(dpi=dpi, alpha=False)
     img = Image.open(io.BytesIO(pix.tobytes("png")))
@@ -85,18 +88,20 @@ def extract_pages(pdf_path: pathlib.Path) -> List[Dict[str, Any]]:
     out = []
     for i, p in enumerate(doc):
         txt = page_text_with_ocr(p)
-        out.append({"page": i+1, "text": txt})
+        out.append({"page": i + 1, "text": txt})
     return out
 
-def chunk_pages(pages: List[Dict[str,Any]], max_words=CHUNK_WORDS):
+def chunk_pages(pages: List[Dict[str, Any]], max_words=CHUNK_WORDS):
     chunks = []
     buf, start = [], None
     for pg in pages:
-        words = pg["text"].split()
-        if start is None: start = pg["page"]
+        if start is None:
+            start = pg["page"]
         buf.append(pg["text"])
-        if sum(len(b.split()) for b in buf) >= max_words:
-            chunks.append({"pages": (start, pg["page"]), "text": "\n".join(buf)})
+        words_total = sum(len(b.split()) for b in buf)
+        if words_total >= max_words:
+            end_page = pg["page"]
+            chunks.append({"pages": (start, end_page), "text": "\n".join(buf)})
             buf, start = [], None
     if buf:
         chunks.append({"pages": (start, pages[-1]["page"]), "text": "\n".join(buf)})
@@ -111,7 +116,7 @@ class Deduper:
 
     def _ensure(self):
         if self.index is None:
-            self.index = faiss.IndexFlatIP(1024)  # bge-m3 dim=1024
+            self.index = faiss.IndexFlatIP(1024)  # dimension bge-m3
             self.vecs = np.zeros((0,1024), dtype=np.float32)
 
     def is_duplicate(self, question: str, threshold=0.90) -> bool:
@@ -121,7 +126,7 @@ class Deduper:
             self.vecs = np.vstack([self.vecs, v])
             self.index.add(v)
             return False
-        D, I = self.index.search(v, 1)
+        D, _ = self.index.search(v, 1)
         is_dup = float(D[0][0]) >= threshold
         if not is_dup:
             self.vecs = np.vstack([self.vecs, v])
@@ -150,40 +155,62 @@ generated_at: "{datetime.now().isoformat(timespec='seconds')}"
             _qid = qid(c)
             pages = c.get("pages", [])
             src = f"{header['source']}#p={pages[0]}-{pages[-1]}" if pages else header['source']
-            f.write(f"\n---\n### [QID:{_qid}] (type: {c['type']}, pages: {pages})\n")
-            f.write(f"**Q.** {c['question']}\n\n")
-            if c["type"] == "mcq":
-                choices = c.get("choices", [])
-                for i, ch in enumerate(choices, 1):
+            f.write(f"\n---\n### [QID:{_qid}] (type: {c.get('type','?')}, pages: {pages})\n")
+            f.write(f"**Q.** {c.get('question','')}\n\n")
+            if c.get("type") == "mcq":
+                for i, ch in enumerate(c.get("choices", []), 1):
                     f.write(f"{chr(64+i)}) {ch}\n")
                 f.write(f"\n**Réponse :** {c.get('correct','?')}\n")
             else:
-                f.write(f"**Réponse :** {c['answer']}\n")
+                f.write(f"**Réponse :** {c.get('answer','')}\n")
             if c.get("why"):
                 f.write(f"*Pourquoi:* {c['why']}\n")
             f.write(f"*Source:* {src}\n")
 
 # ==== Main ====
 def run(pdf_dir: str, out_notes: str, course_name: str):
+    print(f"[INFO] Backend: {'Ollama' if USE_OLLAMA else 'OpenAI'}")
+    print(f"[INFO] CWD: {pathlib.Path.cwd()}")
+    print(f"[INFO] PDF dir: {pdf_dir}  out: {out_notes}  course: {course_name}")
+
+    # Prompts
     system_prompt = pathlib.Path("tools/prompts/system.md").read_text(encoding="utf-8")
     critic_prompt = pathlib.Path("tools/prompts/critic.md").read_text(encoding="utf-8")
+
     deduper = Deduper()
 
-    for pdf in sorted(pathlib.Path(pdf_dir).glob("*.pdf")):
+    pdfs = sorted(pathlib.Path(pdf_dir).glob("*.pdf"))
+    print(f"[INFO] Found {len(pdfs)} PDFs: {[p.name for p in pdfs]}")
+    if not pdfs:
+        print("[ERROR] 0 PDF trouvés. Vérifie data/pdf/ et LFS.", file=sys.stderr)
+
+    api_calls = 0
+
+    for pdf in pdfs:
         print(f"[INFO] Processing {pdf.name}")
         pages = extract_pages(pdf)
-        print(f"[INFO] {pdf.name}: pages={len(pages)}, chars_total={sum(len(pg['text']) for pg in pages)}")
+        chars_total = sum(len(pg["text"]) for pg in pages)
+        print(f"[INFO] {pdf.name}: pages={len(pages)}, chars_total={chars_total}")
+
         chunks = chunk_pages(pages)
         print(f"[INFO] {pdf.name}: chunks={len(chunks)}")
 
         all_cards = []
         for ch in tqdm(chunks, desc=f"Gen {pdf.name}"):
+            if len(ch["text"].strip()) < 50:
+                # chunk trop pauvre : on skip pour éviter des appels inutiles
+                continue
+            api_calls += 1
+            print(f"[INFO] Calling LLM for {pdf.name} pages {ch['pages']} (chars={len(ch['text'])})")
             raw = call_llm_generate(system_prompt, ch["text"], ch["pages"])
-            for q in raw:
+            for q in (raw or []):
                 qc = call_llm_critic(critic_prompt, q, ch["text"])
                 keep = qc.get("keep", True)
                 if not keep and qc.get("fix"):
-                    q = json.loads(qc["fix"])
+                    try:
+                        q = json.loads(qc["fix"])
+                    except Exception:
+                        keep = False
                 if keep and not deduper.is_duplicate(q.get("question","")):
                     q["pages"] = list(range(ch["pages"][0], ch["pages"][1]+1))
                     all_cards.append(q)
@@ -194,6 +221,8 @@ def run(pdf_dir: str, out_notes: str, course_name: str):
             header={"course": course_name, "source": f"data/pdf/{pdf.name}"},
             cards=all_cards
         )
+
+    print(f"[INFO] Total LLM calls: {api_calls}")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
