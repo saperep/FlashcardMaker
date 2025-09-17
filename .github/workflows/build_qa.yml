@@ -1,39 +1,38 @@
-name: Build Flashcards on PDF push
+name: Build Flashcards on PDF push (multi-course)
 
 on:
   push:
     paths:
-      - 'data/pdf/**.pdf'
+      - 'courses/**/data/pdf/**.pdf'
+      - 'courses/**/data/pdf/**.PDF'
   workflow_dispatch:
 
 permissions:
-  contents: write   # autorise le bot à pousser les fichiers générés
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
 
+      - name: List repo tree (HEAD)
+        run: |
+          git ls-tree -r --name-only HEAD | sed -n '1,200p'
+
       - name: Ensure LFS files are present
         run: |
           git lfs pull
           git lfs checkout
+          echo "LFS tracked:"
           git lfs ls-files -l || true
-          echo "PDFs present:"
-          ls -lh data/pdf || true
-          echo
-          echo "Detect LFS pointers (should NOT say POINTER):"
-          (for f in data/pdf/*.pdf; do
-            [ -f "$f" ] || continue
-            head -n 3 "$f" 2>/dev/null | grep -q "git-lfs.github.com" && echo "POINTER: $f" || echo "OK: $f"
-          done) || true
+          echo "PDFs:"
+          find courses -type f \( -iname "*.pdf" \) -printf "%p\n" 2>/dev/null || true
 
-      - name: Install Tesseract OCR (eng + fra)
+      - name: Install Tesseract (eng+fra)
         run: |
           sudo apt-get update
           sudo apt-get install -y tesseract-ocr tesseract-ocr-fra
@@ -47,57 +46,59 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml', '**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
+          restore-keys: ${{ runner.os }}-pip-
 
-      - name: Install Python dependencies
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install pymupdf Pillow pytesseract sentence-transformers faiss-cpu numpy tqdm openai genanki pymupdf4llm
 
-      - name: Sanity check OpenAI
+      - name: Detect changed courses
+        id: detect
+        run: |
+          set -e
+          before="${{ github.event.before }}"
+          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            changed=$(git ls-files)
+          else
+            changed=$(git diff --name-only "$before" "${{ github.sha }}")
+          fi
+          courses=$(echo "$changed" | grep -E '^courses/[^/]+/data/pdf/.*\.(pdf|PDF)$' | sed -E 's@^(courses/[^/]+)/.*@\1@' | sort -u)
+          echo "Courses changed:"
+          echo "$courses"
+          {
+            echo "courses<<EOF"
+            echo "$courses"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Generate flashcards per course
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          python - <<'PY'
-          import os
-          from openai import OpenAI
-          print("[CHECK] OPENAI_API_KEY present:", bool(os.getenv("OPENAI_API_KEY")))
-          client = OpenAI()
-          r = client.chat.completions.create(
-              model="gpt-4o-mini",
-              messages=[{"role":"user","content":"Say OK"}],
-              temperature=0
-          )
-          print("[CHECK] OpenAI reply:", r.choices[0].message.content.strip())
-          PY
-
-      - name: Generate flashcards (OpenAI)
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python tools/make_qa.py --course "SYE"
-
-      - name: Debug listing
-        run: |
-          echo "Tree after generation:"
-          ls -R || true
-
-      - name: Upload notes artifact (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: notes
-          path: notes/**/*.md
-          if-no-files-found: ignore
+          set -e
+          any=0
+          while IFS= read -r course; do
+            [ -z "$course" ] && continue
+            any=1
+            cname="$(basename "$course")"
+            echo ">>> Processing $cname"
+            python tools/make_qa.py \
+              --course "$cname" \
+              --pdf-dir "$course/data/pdf" \
+              --out-notes "$course/notes"
+          done <<< "${{ steps.detect.outputs.courses }}"
+          if [ "$any" = "0" ]; then
+            echo "No changed courses detected. Exiting."
+            exit 0
+          fi
 
       - name: Commit outputs
         run: |
           git config user.name "flashcards-bot"
           git config user.email "bot@users.noreply.github.com"
-          mkdir -p notes anki
-          echo "[CI] $(date) – post-gen tree" > notes/BUILD_LOG.md
-          ls -R >> notes/BUILD_LOG.md
-          git add -f notes anki || true
+          find courses -type d -name notes -print0 | xargs -0 -I{} bash -lc 'git add -f "{}" || true'
+          git add -f .qa_index.json || true
           git commit -m "auto: flashcards updated" || echo "nothing to commit"
           git push
