@@ -59,14 +59,24 @@ jobs:
         run: |
           set -e
           before="${{ github.event.before }}"
-          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
-            changed=$(git ls-files)
+          sha="${{ github.sha }}"
+
+          # Si 'before' n’est pas un commit dispo (push initial, force-push, shallow, etc.)
+          if [ -z "$before" ] || ! git cat-file -e "$before^{commit}" 2>/dev/null; then
+            echo "No usable 'before' commit; falling back to listing tracked files at HEAD."
+            changed=$(git ls-tree -r --name-only HEAD)
           else
-            changed=$(git diff --name-only "$before" "${{ github.sha }}")
+            changed=$(git diff --name-only "$before" "$sha")
           fi
-          courses=$(echo "$changed" | grep -E '^courses/[^/]+/data/pdf/.*\.(pdf|PDF)$' | sed -E 's@^(courses/[^/]+)/.*@\1@' | sort -u)
+
+          courses=$(echo "$changed" \
+            | grep -E '^courses/[^/]+/data/pdf/.*\.(pdf|PDF)$' \
+            | sed -E 's@^(courses/[^/]+)/.*@\1@' \
+            | sort -u)
+
           echo "Courses changed:"
           echo "$courses"
+
           {
             echo "courses<<EOF"
             echo "$courses"
