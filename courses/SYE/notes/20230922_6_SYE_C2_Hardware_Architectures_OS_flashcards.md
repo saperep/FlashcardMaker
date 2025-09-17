@@ -509,3 +509,559 @@ generated_at: "2025-09-16T10:34:42"
 **Source :** `data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=15-17`
 
 </details>
+
+<!-- QID:784c2ed0e272 -->
+### Quel est le rôle fondamental d'un système d'exploitation en matière de sécurité applicative ?  <sup>p. 1–3</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Le rôle fondamental d'un système d'exploitation est de garantir que les applications ne peuvent pas interférer illicitement entre elles et ne peuvent pas accéder au matériel de manière non autorisée.
+
+**Pourquoi :** Cela permet de protéger les applications et le noyau de l'OS contre des accès non sécurisés.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=1-3`
+
+</details>
+
+<!-- QID:6b16f870cb8c -->
+### Quelles instructions ne peuvent être exécutées que par le noyau du système d'exploitation ?  <sup>p. 1–3</sup>
+
+**Choix :**
+
+- A) Instructions de base
+- B) Instructions sensibles
+- C) Instructions de contrôle
+- D) Instructions de mémoire
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Seules les instructions sensibles sont réservées au noyau pour garantir la sécurité du système.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=1-3`
+
+</details>
+
+<!-- QID:3c8230b96a50 -->
+### Les requêtes du processeur vers l'extérieur sont de nature asynchrone.  <sup>p. 1–3</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Ces requêtes sont de nature synchrone car elles sont initiées par le processeur et exécutées immédiatement.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=1-3`
+
+</details>
+
+<!-- QID:087dbf022a0b -->
+### Quel composant est chargé du séquençage des opérations dans l'architecture Von Neumann ?  <sup>p. 1–3</sup>
+
+**Choix :**
+
+- A) ALU
+- B) Registres
+- C) Unité de contrôle
+- D) Mémoire
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** L'unité de contrôle est responsable du séquençage des opérations dans l'architecture Von Neumann.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=1-3`
+
+</details>
+
+<!-- QID:bba5afc610dc -->
+### Comment les requêtes en provenance de l'extérieur vers le processeur sont-elles définies ?  <sup>p. 1–3</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Ces requêtes sont typiquement des interruptions matérielles, provoquées par des contrôleurs de périphérique qui interrompent le programme en cours d'exécution.
+
+**Pourquoi :** Elles sont toujours de nature asynchrone par définition.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=1-3`
+
+</details>
+
+<!-- QID:9dbefc479610 -->
+### L'espace d'adressage est l'ensemble des adresses que le processeur peut ____.  <sup>p. 4–5</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** accéder
+
+**Pourquoi :** Définition de l'espace d'adressage dans le contexte du processeur.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=4-5`
+
+</details>
+
+<!-- QID:07fcaa5fadb1 -->
+### Quel est le rôle principal de la MMU ?  <sup>p. 4–5</sup>
+
+**Choix :**
+
+- A) Gérer l'exécution des applications
+- B) Traduire une adresse virtuelle en une adresse physique
+- C) Contrôler l'accès au matériel
+- D) Augmenter la vitesse du processeur
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** La MMU est spécifiquement responsable de la traduction des adresses.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=4-5`
+
+</details>
+
+<!-- QID:c6792c01c2da -->
+### Vrai ou Faux: Les instructions sensibles peuvent être exécutées par n'importe quelle application.  <sup>p. 4–5</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Seules les instructions sensibles peuvent être exécutées par le noyau, pas par les applications.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=4-5`
+
+</details>
+
+<!-- QID:d33d28f3597a -->
+### Pourquoi est-il important que les applications ne puissent pas interférer avec d'autres applications en cours d'exécution ?  <sup>p. 4–5</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Il est crucial pour la sécurité au niveau applicatif, afin d'éviter des interférences illicites qui pourraient compromettre le fonctionnement des autres applications et du système d'exploitation.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=4-5`
+
+</details>
+
+<!-- QID:d30a9dd2eb3e -->
+### Quel type d'instructions ne peut être exécuté que par le noyau ?  <sup>p. 4–5</sup>
+
+**Choix :**
+
+- A) Instructions d'accès I/O
+- B) Instructions de modification du registre d'état
+- C) Instructions privilégiées
+- D) Instructions de calcul
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** Les instructions privilégiées sont réservées au noyau pour garantir la sécurité du système.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=4-5`
+
+</details>
+
+<!-- QID:6b9478513331 -->
+### Le passage du mode kernel en mode user s'effectue en modifiant le ______ du processeur.  <sup>p. 6–7</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** registre d'état
+
+**Pourquoi :** Le registre d'état est essentiel pour changer les modes d'exécution du CPU.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=6-7`
+
+</details>
+
+<!-- QID:48e733961b0c -->
+### Quel type d'interruption est déclenché par l'exécution d'une instruction par le processeur ?  <sup>p. 6–7</sup>
+
+**Choix :**
+
+- A) Interruption matérielle
+- B) Interruption logicielle
+- C) Interruption asynchrone
+- D) Interruption synchrone
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** L'interruption logicielle est causée par des exceptions lors de l'exécution d'instructions.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=6-7`
+
+</details>
+
+<!-- QID:c0fcb7d1f921 -->
+### Le mode utilisateur permet d'exécuter des instructions sensibles.  <sup>p. 6–7</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Le mode utilisateur ne permet pas l'exécution d'instructions sensibles, seul le mode noyau le permet.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=6-7`
+
+</details>
+
+<!-- QID:4653a1357866 -->
+### Quelles sont les différences principales entre une interruption matérielle et une interruption logicielle ?  <sup>p. 6–7</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Une interruption matérielle est asynchrone et provient d'un périphérique, tandis qu'une interruption logicielle est synchrone et est causée par l'exécution d'une instruction qui entraîne une exception.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=6-7`
+
+</details>
+
+<!-- QID:8567a0c38a64 -->
+### Quel est le rôle d'une routine de service (ISR) lors d'une interruption ?  <sup>p. 6–7</sup>
+
+**Choix :**
+
+- A) Terminer le programme
+- B) Exécuter une fonction spécifique en réponse à l'interruption
+- C) Modifier le registre d'état
+- D) Passer en mode utilisateur
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** La routine de service est conçue pour gérer les interruptions et exécuter des tâches spécifiques.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=6-7`
+
+</details>
+
+<!-- QID:ddf93ad2e039 -->
+### Quel composant est responsable de la gestion des interruptions avant qu'elles n'atteignent le processeur ?  <sup>p. 8–9</sup>
+
+**Choix :**
+
+- A) A: Processeur
+- B) B: Contrôleur d'interruption
+- C) C: Mémoire
+- D) D: Périphérique
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Le contrôleur d'interruption gère les lignes d'interruption et permet une gestion efficace des interruptions avant qu'elles ne soient transmises au CPU.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=8-9`
+
+</details>
+
+<!-- QID:10ee8eceb08a -->
+### Vrai ou Faux: Le vecteur d'interruption associe directement l'adresse de la routine de service au numéro d'interruption.  <sup>p. 8–9</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Le vecteur d'interruption utilise une indirection pour associer un numéro d'interruption à l'adresse de la routine de service, ce qui permet une flexibilité entre différents systèmes d'exploitation.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=8-9`
+
+</details>
+
+<!-- QID:65a1f3eec711 -->
+### Lorsqu'une interruption est reçue, le CPU doit d'abord _____ l'exécution en cours avant de passer en mode noyau.  <sup>p. 8–9</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** interrompre
+
+**Pourquoi :** Le CPU doit terminer l'instruction en cours pour pouvoir exécuter la routine de service associée à l'interruption.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=8-9`
+
+</details>
+
+<!-- QID:6d74cba8af3e -->
+### Comment les processeurs multicœurs gèrent-ils les interruptions ?  <sup>p. 8–9</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les processeurs multicœurs utilisent un contrôleur d'interruption local à chaque cœur pour dispatcher les interruptions. Cela permet d'équilibrer la charge des interruptions entre les cœurs de calcul, améliorant ainsi l'efficacité du traitement.
+
+**Pourquoi :** Cette gestion permet d'optimiser les performances en répartissant les interruptions sur plusieurs unités de traitement.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=8-9`
+
+</details>
+
+<!-- QID:c199cc12c392 -->
+### Un système d'exploitation doit fournir une interface conviviale, performante et sécurisée aux __________.  <sup>p. 10–11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** applications utilisateur
+
+**Pourquoi :** C'est une des deux perspectives selon lesquelles un OS est défini.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:e0679927314b -->
+### Quelle architecture d'OS place tous les sous-systèmes dans l'espace noyau?  <sup>p. 10–11</sup>
+
+**Choix :**
+
+- A) Monolithique
+- B) Micronoyau
+- C) Client-serveur
+- D) Distribué
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** A
+
+**Pourquoi :** L'architecture monolithique consiste à regrouper tous les sous-systèmes dans l'espace noyau.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:e004f10eab2d -->
+### L'architecture micronoyau offre une meilleure sécurité au niveau des applications.  <sup>p. 10–11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Vrai
+
+**Pourquoi :** L'architecture micronoyau est conçue pour améliorer la sécurité des applications en séparant les sous-systèmes.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:a02f24fc7f76 -->
+### Quelles sont les deux grandes architectures de systèmes d'exploitation mentionnées dans le cours?  <sup>p. 10–11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les deux grandes architectures de systèmes d'exploitation sont l'architecture monolithique et l'architecture micronoyau.
+
+**Pourquoi :** Ces deux architectures sont fondamentales pour comprendre le fonctionnement des systèmes d'exploitation.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:f7777c0cc689 -->
+### Quel est un inconvénient de l'architecture monolithique?  <sup>p. 10–11</sup>
+
+**Choix :**
+
+- A) Performance accrue
+- B) Simplicité d'accès
+- C) Problèmes liés à la sécurité d'exécution
+- D) Extensibilité aisée
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** L'architecture monolithique, bien que performante, présente des risques de sécurité car tous les sous-systèmes sont dans l'espace noyau.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:d5ef54009563 -->
+### Les appels système nécessitent l'utilisation d'une __________ dédiée.  <sup>p. 10–11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** instruction machine
+
+**Pourquoi :** Les appels système sont des mécanismes particuliers qui nécessitent une instruction machine spécifique pour être traités.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=10-11`
+
+</details>
+
+<!-- QID:bec78f6071f8 -->
+### L'architecture micronoyau est beaucoup plus ______ que l'architecture monolithique.  <sup>p. 12–14</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** sécurisée
+
+**Pourquoi :** L'architecture micronoyau minimise les fonctionnalités dans l'espace noyau, augmentant ainsi la sécurité.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=12-14`
+
+</details>
+
+<!-- QID:52b5be424e54 -->
+### Quel est l'avantage principal de l'architecture micronoyau par rapport à l'architecture monolithique?  <sup>p. 12–14</sup>
+
+**Choix :**
+
+- A) A. Performances élevées
+- B) B. Sécurité accrue
+- C) C. Simplicité
+- D) D. Coût réduit
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** L'architecture micronoyau réduit les fonctionnalités dans l'espace noyau, rendant le système moins susceptible de planter.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=12-14`
+
+</details>
+
+<!-- QID:46cac129772d -->
+### L'architecture de Windows Vista est entièrement de type micronoyau.  <sup>p. 12–14</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Windows Vista utilise une architecture hybride, combinant des éléments de micronoyau et de monolithique.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=12-14`
+
+</details>
+
+<!-- QID:8aa9041f41c2 -->
+### Qu'est-ce que l'approche client-serveur dans le contexte de l'architecture micronoyau?  <sup>p. 12–14</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** L'approche client-serveur permet une communication claire entre les sous-systèmes et les processus utilisateurs, en spécifiant les interfaces et les protocoles de communication.
+
+**Pourquoi :** Cette approche est essentielle pour maintenir la séparation et la sécurité dans un système d'exploitation basé sur un micronoyau.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=12-14`
+
+</details>
+
+<!-- QID:7ea854c35e74 -->
+### Quel type d'architecture est décrit comme un compromis entre les architectures monolithique et micronoyau?  <sup>p. 12–14</sup>
+
+**Choix :**
+
+- A) A. Architecture monolithique
+- B) B. Architecture micronoyau
+- C) C. Architecture hybride
+- D) D. Architecture distribuée
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** L'architecture hybride combine des éléments des deux types pour optimiser performances et sécurité.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=12-14`
+
+</details>
+
+<!-- QID:5377f930c63d -->
+### Dans une architecture de type micronoyau, les services utilisateur et le noyau sont conservés dans un espace d'adressage _____.  <sup>p. 15–17</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** séparé
+
+**Pourquoi :** C'est une caractéristique fondamentale des architectures de type micronoyau.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=15-17`
+
+</details>
+
+<!-- QID:d318dd24f80d -->
+### Un micro-noyau est plus gros qu'un noyau monolithique.  <sup>p. 15–17</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Les micro-noyaux sont généralement plus petits que les noyaux monolithiques.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=15-17`
+
+</details>
+
+<!-- QID:da7ee30730ff -->
+### Quelles sont les principales différences entre un micro-noyau et un noyau monolithique en termes de sécurité ?  <sup>p. 15–17</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Dans un micro-noyau, si un service tombe en panne, cela n'affecte pas nécessairement le fonctionnement du système entier. En revanche, dans un noyau monolithique, une panne de service peut entraîner un blocage complet du système.
+
+**Pourquoi :** Cette distinction est cruciale pour comprendre les implications de chaque architecture sur la stabilité du système.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=15-17`
+
+</details>
+
+<!-- QID:c5faad2b3788 -->
+### Quel est l'impact de la taille du code nécessaire pour écrire un micro-noyau par rapport à un noyau monolithique ?  <sup>p. 15–17</sup>
+
+**Choix :**
+
+- A) Moins de code
+- B) Autant de code
+- C) Plus de code
+- D) Aucun code
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** La complexité et la séparation des services dans un micro-noyau nécessitent généralement plus de code.
+
+**Source :** `courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf#p=15-17`
+
+</details>

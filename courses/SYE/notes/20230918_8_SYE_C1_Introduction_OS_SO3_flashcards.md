@@ -1265,3 +1265,701 @@ D) Instruction de transfert
 **Source :** `data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
 
 </details>
+
+<!-- QID:ebb38449b30d -->
+### Qui est l'auteur de la première notion d'ordinateur et en quelle année cela a-t-il été proposé ?  <sup>p. 1–7</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Charles Babbage a proposé la première notion d'ordinateur en 1833.
+
+**Pourquoi :** Charles Babbage est reconnu pour avoir conçu la machine différentielle, qui est considérée comme un précurseur de l'ordinateur moderne.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=1-7`
+
+</details>
+
+<!-- QID:cccf5a8e6a48 -->
+### La machine conçue par Charles Babbage en 1833 devait permettre de résoudre n'importe quelle équation et d'exécuter les opérations les plus compliquées de l'_______.  <sup>p. 1–7</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** analyse mathématique
+
+**Pourquoi :** Cette machine était destinée à effectuer des calculs complexes, ce qui est fondamental dans le domaine de l'analyse mathématique.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=1-7`
+
+</details>
+
+<!-- QID:ad07592f9626 -->
+### Quel est le domaine d'expertise de Fiorenzo Gamba ?  <sup>p. 1–7</sup>
+
+**Choix :**
+
+- A) A. Développement Web
+- B) B. Governance IT, Security, Risk & Business Continuity
+- C) C. Gestion de projet
+- D) D. Architecture d'entreprise
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Fiorenzo Gamba est un consultant senior spécialisé dans la gouvernance IT et la sécurité, avec une expérience significative dans ces domaines.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=1-7`
+
+</details>
+
+<!-- QID:6a7fe9992bc6 -->
+### Quel est le principal composant de la première génération d'ordinateurs?  <sup>p. 8–10</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les relais et tubes à vide.
+
+**Pourquoi :** La première génération d'ordinateurs (1945-1955) était basée sur ces composants, qui étaient fragiles et encombrants.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:1d407b9bf09d -->
+### Quel système d'exploitation était utilisé dans la deuxième génération d'ordinateurs?  <sup>p. 8–10</sup>
+
+**Choix :**
+
+- A) A. DOS
+- B) B. FMS
+- C) C. Windows
+- D) D. UNIX
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** FMS était l'un des systèmes d'exploitation principaux de la deuxième génération, qui utilisait des cartes perforées.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:d4468a41715b -->
+### Vrai ou Faux: Les ordinateurs de la première génération utilisaient des langages de programmation avancés.  <sup>p. 8–10</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Les premières générations d'ordinateurs n'avaient pas de langages de programmation connus et étaient programmées à l'aide de tableaux d'interrupteurs.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:39458d987a68 -->
+### La deuxième génération d'ordinateurs a été marquée par l'invention du ______ en 1947.  <sup>p. 8–10</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** transistor
+
+**Pourquoi :** L'invention du transistor a permis de remplacer les tubes à vide, rendant les ordinateurs plus petits et fiables.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:bb571cac1727 -->
+### Quel était un des principaux problèmes de la deuxième génération d'ordinateurs concernant le traitement des programmes?  <sup>p. 8–10</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Un grand gaspillage de temps pendant les manipulations humaines et le chargement des programmes.
+
+**Pourquoi :** Cela a conduit à l'introduction de systèmes de batch pour améliorer l'efficacité.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:95486623f013 -->
+### Quel ordinateur a été lancé par Hewlett-Packard en 1972?  <sup>p. 8–10</sup>
+
+**Choix :**
+
+- A) A. IBM 360
+- B) B. HP 3000
+- C) C. Apple II
+- D) D. PET
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Le HP 3000 était un mini-ordinateur de gestion fonctionnant en multi-tâches temps réel et multi-utilisateur.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=8-10`
+
+</details>
+
+<!-- QID:7c11a92c9fa0 -->
+### La troisième génération d’ordinateurs est celle des ordinateurs à _________.  <sup>p. 11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** circuit intégré
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:bb4c06220def -->
+### Quel système d'exploitation a été la première série de machines à utiliser des circuits intégrés ?  <sup>p. 11</sup>
+
+**Choix :**
+
+- A) A. OS/360
+- B) B. IBM System/360
+- C) C. Multics
+- D) D. UNIX
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** IBM System/360 a été conçu pour unifier plusieurs lignes de produits.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:e116957101b5 -->
+### Le projet Multics a connu un grand succès commercial.  <sup>p. 11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:db8b903ff3f2 -->
+### Quelles sont les trois techniques fondamentales développées durant la troisième génération d’ordinateurs ?  <sup>p. 11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les techniques fondamentales sont la multiprogrammation, le spool et le temps partagé.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:f0adaf305f18 -->
+### Quel standard a été développé par l'IEEE pour assurer la compatibilité entre les systèmes UNIX ?  <sup>p. 11</sup>
+
+**Choix :**
+
+- A) A. UNIX
+- B) B. POSIX
+- C) C. Minix
+- D) D. System V
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** POSIX a été créé pour que les programmes puissent fonctionner sur tous les systèmes UNIX.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:3f0c403746a8 -->
+### Le ________ permet le traitement des jobs au fur et à mesure.  <sup>p. 11</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** spool
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=11-11`
+
+</details>
+
+<!-- QID:06d73b998e5c -->
+### Les premiers microprocesseurs ont fait leur apparition grâce au développement des circuits LSI contenant des milliers de transistors par mm2 dans le milieu des années _____.  <sup>p. 12</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** 70
+
+**Pourquoi :** Les circuits LSI ont été développés dans les années 70, ce qui a permis l'apparition des microprocesseurs.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=12-12`
+
+</details>
+
+<!-- QID:6fac4fa6ab94 -->
+### Quel système d'exploitation a été fourni à IBM pour leur PC après le refus de Digital Research?  <sup>p. 12</sup>
+
+**Choix :**
+
+- A) Windows
+- B) MS-DOS
+- C) Linux
+- D) Unix
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Bill Gates a acheté un système d'exploitation à Seattle Computer Products, qui a été modifié pour devenir MS-DOS.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=12-12`
+
+</details>
+
+<!-- QID:98ad04c810a5 -->
+### Vrai ou Faux: La première version de MS-DOS était très sophistiquée.  <sup>p. 12</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** La première version de MS-DOS était décrite comme très primitive.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=12-12`
+
+</details>
+
+<!-- QID:b57fbc59b307 -->
+### Quel a été le rôle de Steve Jobs dans le développement des interfaces graphiques?  <sup>p. 12</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Steve Jobs a pris conscience de la plus-value d'une IHM graphique et a contribué au succès commercial de la Macintosh d'Apple, qui a été influente dans le développement ultérieur d'interfaces graphiques par d'autres entreprises comme Microsoft.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=12-12`
+
+</details>
+
+<!-- QID:3d2008e436c4 -->
+### Quel concept a été un différentiateur décisif pour le succès des développeurs d'OS?  <sup>p. 12</sup>
+
+**Choix :**
+
+- A) Système d'exploitation distribué
+- B) IHM graphique
+- C) Virtualisation
+- D) Système d'exploitation en réseaux
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Le concept d'IHM graphique a été identifié comme un facteur clé de succès pour les développeurs d'OS.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=12-12`
+
+</details>
+
+<!-- QID:658c3dd72fa7 -->
+### Qu'est-ce qu'un système d'exploitation selon la définition fournie dans l'extrait?  <sup>p. 13–15</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Un système d'exploitation est l'ensemble de programmes central d'un appareil informatique qui sert d'interface entre le matériel et les logiciels applicatifs.
+
+**Pourquoi :** Cette définition souligne le rôle fondamental d'un système d'exploitation dans la gestion des interactions entre le matériel et les logiciels.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=13-15`
+
+</details>
+
+<!-- QID:1ee9e6a3ffac -->
+### Quel ouvrage est décrit comme étant plus détaillé sur les systèmes d'exploitation?  <sup>p. 13–15</sup>
+
+**Choix :**
+
+- A) A. Silberschatz et al.: 'Operating Systems Concepts'
+- B) B. Andrew Tanenbaum: 'Systèmes d'exploitation'
+- C) C. Aucun des deux
+- D) D. Les deux ouvrages sont identiques
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** L'extrait mentionne que l'ouvrage de Tanenbaum est quelque peu plus détaillé que celui de Silberschatz.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=13-15`
+
+</details>
+
+<!-- QID:3dd973b8c755 -->
+### Les systèmes d'exploitation se déclinent en différentes variantes selon le domaine d'application, tels que les OS _____ pour les applications critiques et les OS _____ destinés à des petits systèmes.  <sup>p. 13–15</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** temps-réel strict, embarqués
+
+**Pourquoi :** Ces termes décrivent des catégories spécifiques de systèmes d'exploitation en fonction de leur utilisation.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=13-15`
+
+</details>
+
+<!-- QID:6a5fb1599fa7 -->
+### Quelles sont les trois grandes familles de systèmes d'exploitation mentionnées dans l'extrait?  <sup>p. 13–15</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les OS provenant de Microsoft, ceux provenant d'Apple, et ceux développés dans le cadre des logiciels libres (comme Linux).
+
+**Pourquoi :** Ces familles regroupent les systèmes d'exploitation selon leur origine et leur modèle de développement.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=13-15`
+
+</details>
+
+<!-- QID:7d144de411f7 -->
+### L'architecture d'un système d'exploitation se découpe en 3 couches principales: le matériel, le noyau de l'OS et les _______.  <sup>p. 16–19</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** applications
+
+**Pourquoi :** Les applications tournent sur le noyau et interagissent avec le matériel via celui-ci.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=16-19`
+
+</details>
+
+<!-- QID:81795b0ba1b4 -->
+### Quel est le rôle principal du noyau d'un système d'exploitation ?  <sup>p. 16–19</sup>
+
+**Choix :**
+
+- A) Gérer les applications
+- B) Sécuriser les accès au matériel
+- C) Exécuter des instructions utilisateur
+- D) Gérer les ressources réseau
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Le noyau est responsable de la gestion des accès au matériel et de la supervision des applications.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=16-19`
+
+</details>
+
+<!-- QID:14cb499c7a9d -->
+### Quelles sont les caractéristiques principales de SO3 ?  <sup>p. 16–19</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** SO3 est un système d'exploitation léger open source conçu pour des systèmes embarqués avec des processeurs ARM 32-bit. Il permet d'expérimenter des techniques logicielles et peut tourner dans un environnement émulé avec Qemu.
+
+**Pourquoi :** Ces caractéristiques permettent une utilisation efficace et flexible dans des environnements variés.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=16-19`
+
+</details>
+
+<!-- QID:2abb23572523 -->
+### Quel système de compilation est utilisé par SO3 ?  <sup>p. 16–19</sup>
+
+**Choix :**
+
+- A) Makefile
+- B) KBuild
+- C) CMake
+- D) Autotools
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** SO3 utilise KBuild, qui est le système de build de Linux, pour sa configuration et compilation.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=16-19`
+
+</details>
+
+<!-- QID:0c58be095a38 -->
+### Le noyau SO3 est écrit en _____ et en assembleur ARM.  <sup>p. 20–22</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** C'est précisé dans l'extrait que SO3 est écrit en C et en assembleur ARM.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=20-22`
+
+</details>
+
+<!-- QID:382d8a5f7082 -->
+### Quel est l'avantage principal de l'environnement émulé basé sur Qemu pour le laboratoire SYE ?  <sup>p. 20–22</sup>
+
+**Choix :**
+
+- A) A. Complexité d'utilisation
+- B) B. Facilité à étudier les entrailles d'un système d'exploitation
+- C) C. Coût élevé
+- D) D. Limitations de développement
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** L'extrait mentionne que l'avantage réside dans la grande facilité à étudier un système d'exploitation.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=20-22`
+
+</details>
+
+<!-- QID:9e4787603514 -->
+### Quelles sont les trois couches principales de l'environnement présenté dans l'extrait ?  <sup>p. 20–22</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Les trois couches principales sont l'espace utilisateur, le noyau de l'OS SO3 (espace noyau) et l'émulateur Qemu.
+
+**Pourquoi :** Ces couches sont clairement énoncées dans l'extrait.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=20-22`
+
+</details>
+
+<!-- QID:2a69908ecd0b -->
+### Quel outil est utilisé pour le développement et le débogage dans le laboratoire SYE ?  <sup>p. 20–22</sup>
+
+**Choix :**
+
+- A) A. Eclipse
+- B) B. Visual Studio Code
+- C) C. Notepad++
+- D) D. Atom
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** L'extrait mentionne que le développement s'effectue avec l'IDE Visual Studio Code.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=20-22`
+
+</details>
+
+<!-- QID:fae37edd23c7 -->
+### Le répertoire ______ comprend l'ensemble du noyau de SO3.  <sup>p. 23–26</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** so3
+
+**Pourquoi :** Le répertoire so3 contient l'ensemble du noyau, tandis que usr contient les applications utilisateur.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=23-26`
+
+</details>
+
+<!-- QID:a96f16a88fa8 -->
+### Le shell de SO3 peut terminer une fois démarré.  <sup>p. 23–26</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Le shell est démarré comme premier processus par le noyau et ne peut donc jamais terminer.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=23-26`
+
+</details>
+
+<!-- QID:2ab5761268b6 -->
+### Comment démarre-t-on l'environnement SO3 ?  <sup>p. 23–26</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** On démarre l'environnement SO3 en tapant ./st dans un terminal.
+
+**Pourquoi :** C'est la commande à exécuter pour initialiser l'environnement SO3.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=23-26`
+
+</details>
+
+<!-- QID:993390aae5c8 -->
+### Un système monotâche permet de faire tourner une seule application sur l'OS à une adresse de chargement __________.  <sup>p. 27–29</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** fixe
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=27-29`
+
+</details>
+
+<!-- QID:39a6a7968cdf -->
+### Un système multitâche augmente l'utilisation du CPU en permettant plusieurs applications en RAM.  <sup>p. 27–29</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Vrai
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=27-29`
+
+</details>
+
+<!-- QID:92efdbdc5fdb -->
+### Qu'est-ce qu'un système byte-adressable ?  <sup>p. 27–29</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Un système byte-adressable est un système où chaque octet peut être référencé individuellement par une adresse unique. Cela signifie que le processeur peut accéder à chaque octet indépendamment.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=27-29`
+
+</details>
+
+<!-- QID:9e3f757a8370 -->
+### Quel est le rôle d'un ordonnanceur dans un système multitâche ?  <sup>p. 27–29</sup>
+
+**Choix :**
+
+- A) A. Charger les applications en mémoire
+- B) B. Gérer la mémoire
+- C) C. Gérer la commutation entre applications
+- D) D. Assurer la sécurité du système
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** C
+
+**Pourquoi :** L'ordonnanceur est responsable de la gestion de la commutation entre les différentes applications en cours d'exécution.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=27-29`
+
+</details>
+
+<!-- QID:1f3206a38537 -->
+### Qu'est-ce que l'espace d'adressage ?  <sup>p. 30</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** L'espace d'adressage représente l'ensemble des octets que le processeur peut référencer.
+
+**Pourquoi :** C'est une définition clé qui décrit la capacité de référence du processeur.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
+
+</details>
+
+<!-- QID:ada9a6fc0e39 -->
+### L'octet est la plus petite entité _____ par le processeur.  <sup>p. 30</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** adressable
+
+**Pourquoi :** Cette notion est essentielle pour comprendre comment le processeur accède à la mémoire.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
+
+</details>
+
+<!-- QID:3dd7b469fe37 -->
+### Quel est le nombre maximal d'octets adressables sur une architecture 32 bits ?  <sup>p. 30</sup>
+
+**Choix :**
+
+- A) 2 Go
+- B) 4 Go
+- C) 8 Go
+- D) 16 Go
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** B
+
+**Pourquoi :** Sur une architecture 32 bits, la quantité d'octets adressables est de 2^32, soit 4 Go.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
+
+</details>
+
+<!-- QID:d9940cd01e7c -->
+### Vrai ou Faux: Un espace d'adressage ne permet d'accéder qu'à la mémoire vive (RAM).  <sup>p. 30</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Faux
+
+**Pourquoi :** Un espace d'adressage permet d'accéder à toute sorte de mémoires, pas seulement à la RAM.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
+
+</details>
+
+<!-- QID:8cd6f13a112d -->
+### Quelle est la différence entre big endian et little endian ?  <sup>p. 30</sup>
+
+<details>
+<summary>Afficher la réponse</summary>
+
+**Réponse :** Big endian place le Most Significant Figure (MSF) à la plus basse adresse mémoire, tandis que little endian place le Least Significant Figure (LSF) à la plus basse adresse.
+
+**Pourquoi :** Cette distinction est importante pour comprendre le stockage des données en mémoire.
+
+**Source :** `courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf#p=30-30`
+
+</details>
