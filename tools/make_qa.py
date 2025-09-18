@@ -295,7 +295,7 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
                     except Exception:
                         keep = False
                 if keep and not DeduperSingleton.is_duplicate(q.get("question","")):
-                    q["pages"] = list(range(ch["pages'][0], ch["pages"][1]+1))
+                    q["pages"] = list(range(ch["pages"][0], ch["pages"][1] + 1))
                     all_cards.append(q)
 
         print(f"[INFO] {pdf.name}: generated {len(all_cards)} cards; summary={'yes' if summary_block else 'no'}")
