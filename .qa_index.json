@@ -61,5 +61,50 @@
     "cards": 218,
     "out": "courses/PCO/notes/pco_polycopie_flashcards.md",
     "has_summary": true
+  },
+  "courses/GOD/data/pdf/1-introduction.pdf": {
+    "hash": "b651ad9df80913a11488995fbc94198230e4cb3991dd3fafe4e558e729f7a56f",
+    "last_run": "2025-09-18T15:42:49",
+    "pages": 27,
+    "chunks": 4,
+    "cards": 28,
+    "out": "courses/GOD/notes/1-introduction_flashcards.md",
+    "has_summary": true
+  },
+  "courses/GOD/data/pdf/2a-propriete-intellectuelle.pdf": {
+    "hash": "a9f59bd2177c6f61d0d1e7ea4e00681e3a406b15dbd904e251853d83161a41dd",
+    "last_run": "2025-09-18T15:47:12",
+    "pages": 33,
+    "chunks": 8,
+    "cards": 54,
+    "out": "courses/GOD/notes/2a-propriete-intellectuelle_flashcards.md",
+    "has_summary": true
+  },
+  "courses/GOD/data/pdf/2b-creative-commons.pdf": {
+    "hash": "c35978bee982a78128b312b53c860489351e0dbcae458b60a2d4db62e5009e42",
+    "last_run": "2025-09-18T15:48:43",
+    "pages": 17,
+    "chunks": 3,
+    "cards": 17,
+    "out": "courses/GOD/notes/2b-creative-commons_flashcards.md",
+    "has_summary": true
+  },
+  "courses/GOD/data/pdf/3-protection-des-donnees.pdf": {
+    "hash": "39cda893b03f11f13e7ff2cc17175f7d0683c4e644572386275abab6f96344bf",
+    "last_run": "2025-09-18T15:55:01",
+    "pages": 55,
+    "chunks": 11,
+    "cards": 65,
+    "out": "courses/GOD/notes/3-protection-des-donnees_flashcards.md",
+    "has_summary": true
+  },
+  "courses/GOD/data/pdf/4-GouvernanceDonnees_Ex-Rech-Appliquee_202411.pdf": {
+    "hash": "62f8db8bed36cafa9e7e41321315cca6f343e3686e5ec89a5f9f433074f3f825",
+    "last_run": "2025-09-18T16:00:18",
+    "pages": 94,
+    "chunks": 10,
+    "cards": 61,
+    "out": "courses/GOD/notes/4-GouvernanceDonnees_Ex-Rech-Appliquee_202411_flashcards.md",
+    "has_summary": true
   }
 }
