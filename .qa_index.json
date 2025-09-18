@@ -16,5 +16,41 @@
     "cards": 40,
     "out": "courses/SYE/notes/20230922_6_SYE_C2_Hardware_Architectures_OS_flashcards.md",
     "has_summary": true
+  },
+  "courses/MAC/data/pdf/00-Introduction.pdf": {
+    "hash": "e183c8592039ace174af1e61ba9dbdeb244e05e907f62bd9dd4892159ca7bbb5",
+    "last_run": "2025-09-18T07:45:58",
+    "pages": 21,
+    "chunks": 3,
+    "cards": 18,
+    "out": "courses/MAC/notes/00-Introduction_flashcards.md",
+    "has_summary": true
+  },
+  "courses/MAC/data/pdf/01-NoSQL-Intro.pdf": {
+    "hash": "1b255b76074a73ba11a2ef65713765e051293711de962805656735f6be5769b3",
+    "last_run": "2025-09-18T07:48:44",
+    "pages": 47,
+    "chunks": 7,
+    "cards": 40,
+    "out": "courses/MAC/notes/01-NoSQL-Intro_flashcards.md",
+    "has_summary": true
+  },
+  "courses/MAC/data/pdf/02-DocumentBasedPart1.pdf": {
+    "hash": "28e408bdbd003891530527309439c5c3cf890f18eeb41b72dd43c9848d216c73",
+    "last_run": "2025-09-18T07:51:24",
+    "pages": 28,
+    "chunks": 6,
+    "cards": 33,
+    "out": "courses/MAC/notes/02-DocumentBasedPart1_flashcards.md",
+    "has_summary": true
+  },
+  "courses/PST/data/pdf/Chap1.pdf": {
+    "hash": "8553026f5517cfb3ff5d9af54a8c74071350ada72c995c84c8b474a2f87c79da",
+    "last_run": "2025-09-18T07:54:19",
+    "pages": 60,
+    "chunks": 8,
+    "cards": 42,
+    "out": "courses/PST/notes/Chap1_flashcards.md",
+    "has_summary": true
   }
 }
