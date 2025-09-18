@@ -1,0 +1,20 @@
+{
+  "courses/SYE/data/pdf/20230918_8_SYE_C1_Introduction_OS_SO3.pdf": {
+    "hash": "0f14a507fcec6a91456326ce95da5488a4eb6bfd5c41184638ee6f1726e862d2",
+    "last_run": "2025-09-18T07:32:30",
+    "pages": 30,
+    "chunks": 10,
+    "cards": 72,
+    "out": "courses/SYE/notes/20230918_8_SYE_C1_Introduction_OS_SO3_flashcards.md",
+    "has_summary": true
+  },
+  "courses/SYE/data/pdf/20230922_6_SYE_C2_Hardware_Architectures_OS.pdf": {
+    "hash": "5b90bd709cebbddc677e2b90f65cde2f6776d879556a73bebd767f15a3a6c2f7",
+    "last_run": "2025-09-18T07:35:18",
+    "pages": 17,
+    "chunks": 7,
+    "cards": 40,
+    "out": "courses/SYE/notes/20230922_6_SYE_C2_Hardware_Architectures_OS_flashcards.md",
+    "has_summary": true
+  }
+}
