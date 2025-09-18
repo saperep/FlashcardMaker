@@ -52,5 +52,14 @@
     "cards": 42,
     "out": "courses/PST/notes/Chap1_flashcards.md",
     "has_summary": true
+  },
+  "courses/PCO/data/pdf/pco_polycopie.pdf": {
+    "hash": "99f4320181bdc85f308f4ca6e30dd2b3ab522ddc22626c16fe6f5d0e49a24a66",
+    "last_run": "2025-09-18T11:58:59",
+    "pages": 81,
+    "chunks": 36,
+    "cards": 218,
+    "out": "courses/PCO/notes/pco_polycopie_flashcards.md",
+    "has_summary": true
   }
 }
