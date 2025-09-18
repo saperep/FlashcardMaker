@@ -16,23 +16,28 @@ import pytesseract
 EMB_MODEL = "BAAI/bge-m3"
 CHUNK_WORDS = 400
 USE_OLLAMA = False
-INDEX_PATH = ".qa_index.json"  # global, à la racine du repo
+INDEX_PATH = ".qa_index.json"  # suit les PDFs déjà traités
 
 # ============ LLM helpers ============
+def _openai_chat(messages, temperature=0.2, model="gpt-4o-mini") -> str:
+    from openai import OpenAI
+    client = OpenAI()
+    return client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature
+    ).choices[0].message.content
+
 def call_llm_generate(system_prompt: str, excerpt: str, pages: Tuple[int, int]) -> List[Dict[str, Any]]:
+    # Génération de cartes pour un chunk
     if USE_OLLAMA:
         import ollama
         prompt = f"{system_prompt}\n\n### EXTRAIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
         txt = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])["message"]["content"]
     else:
-        from openai import OpenAI
-        client = OpenAI()
         prompt = f"{system_prompt}\n\n### EXTRAIT (pages {pages[0]}-{pages[1]}):\n{excerpt}\n\n### RÉPONDS:"
-        txt = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role":"user","content":prompt}],
-            temperature=0.2
-        ).choices[0].message.content
+        txt = _openai_chat([{"role":"user","content":prompt}], temperature=0.2)
+    # Tolérer JSON imparfait
     try:
         return json.loads(txt)
     except Exception:
@@ -48,14 +53,8 @@ def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[
         prompt = f"{critic_prompt}\n\nExtrait:\n{excerpt}\n\nCarte:\n{json.dumps(q,ensure_ascii=False,indent=2)}\n\nRéponds JSON:"
         txt = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])["message"]["content"]
     else:
-        from openai import OpenAI
-        client = OpenAI()
         prompt = f"{critic_prompt}\n\nExtrait:\n{excerpt}\n\nCarte:\n{json.dumps(q,ensure_ascii=False,indent=2)}\n\nRéponds JSON:"
-        txt = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role":"user","content":prompt}],
-            temperature=0.0
-        ).choices[0].message.content
+        txt = _openai_chat([{"role":"user","content":prompt}], temperature=0.0)
     try:
         return json.loads(txt)
     except Exception:
@@ -63,6 +62,33 @@ def call_llm_critic(critic_prompt: str, q: Dict[str,Any], excerpt: str) -> Dict[
         if start == -1 or end == -1:
             return {"keep": True}
         return json.loads(txt[start:end+1])
+
+# ===== Résumé global (map-reduce) =====
+def call_llm_summary_extract(summary_prompt: str, excerpt: str) -> List[str]:
+    """Extraction locale : renvoie 3–6 bullets pour un chunk (liste de lignes)."""
+    if USE_OLLAMA:
+        import ollama
+        prompt = f"{summary_prompt}\n\n### EXTRAIT PARTIEL:\n{excerpt}\n\n### TÂCHE: Extraction locale (3–6 bullets)"
+        txt = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])["message"]["content"]
+    else:
+        prompt = f"{summary_prompt}\n\n### EXTRAIT PARTIEL:\n{excerpt}\n\n### TÂCHE: Extraction locale (3–6 bullets)"
+        txt = _openai_chat([{"role":"user","content":prompt}], temperature=0.2)
+    # Garde seulement les lignes commençant par "- "
+    lines = [ln.strip() for ln in txt.splitlines() if ln.strip().startswith("- ")]
+    # limite raisonnable
+    return lines[:6]
+
+def call_llm_summary_synthesize(summary_prompt: str, bullets: List[str]) -> str:
+    """Synthèse finale : prend tous les bullets et renvoie blocks Markdown (Résumé + À retenir)."""
+    joined = "\n".join(bullets)
+    if USE_OLLAMA:
+        import ollama
+        prompt = f"{summary_prompt}\n\n### BULLETS AGRÉGÉS (PDF ENTIER):\n{joined}\n\n### TÂCHE: Synthèse finale (Résumé essentiel + À retenir absolument)"
+        txt = ollama.chat(model="llama3.1:8b", messages=[{"role":"user","content":prompt}])["message"]["content"]
+    else:
+        prompt = f"{summary_prompt}\n\n### BULLETS AGRÉGÉS (PDF ENTIER):\n{joined}\n\n### TÂCHE: Synthèse finale (Résumé essentiel + À retenir absolument)"
+        txt = _openai_chat([{"role":"user","content":prompt}], temperature=0.2)
+    return txt.strip()
 
 # ============ OCR ============
 def page_text_with_ocr(p, dpi=220, lang="eng+fra", min_chars=30) -> str:
@@ -145,26 +171,33 @@ def save_index(idx: Dict[str,Any], path=INDEX_PATH):
     pathlib.Path(path).write_text(json.dumps(idx, indent=2, ensure_ascii=False), encoding="utf-8")
 
 # ============ Markdown (choix visibles pour MCQ) ============
-def write_markdown(md_path: pathlib.Path, header: Dict[str,Any], cards: List[Dict[str,Any]]):
+def write_markdown(md_path: pathlib.Path, header: Dict[str,Any], cards: List[Dict[str,Any]], summary_block: str | None):
+    """Écrit/écrase le fichier (header + résumé global + cartes)."""
     md_path.parent.mkdir(parents=True, exist_ok=True)
-    if not md_path.exists():
-        head = f"""---
-course: "{header['course']}"
-generated_at: "{datetime.now().isoformat(timespec='seconds')}"
----
-
-# Flashcards – {header['course']}
-
-> Astuce : cliquez pour dérouler la réponse.
-"""
-        md_path.write_text(head, encoding="utf-8")
 
     def page_range(pages: list[int]) -> str:
         if not pages: return ""
         lo, hi = min(pages), max(pages)
         return f"p. {lo}" if lo == hi else f"p. {lo}–{hi}"
 
-    with md_path.open("a", encoding="utf-8") as f:
+    # (Ré)écriture complète pour être sûr que le résumé est en tête
+    with md_path.open("w", encoding="utf-8") as f:
+        head = f"""---
+course: "{header['course']}"
+generated_at: "{datetime.now().isoformat(timespec='seconds')}"
+source_pdf: "{header['source']}"
+---
+
+# Flashcards – {header['course']}
+"""
+        f.write(head)
+
+        if summary_block:
+            f.write("\n---\n")
+            f.write(summary_block.strip())
+            f.write("\n\n---\n")
+
+        # Cartes
         for c in cards:
             q = c.get("question", "").strip()
             why = c.get("why", "")
@@ -202,8 +235,9 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
     print(f"[INFO] CWD: {pathlib.Path.cwd()}")
     print(f"[INFO] PDF dir: {pdf_dir}  out: {out_notes}  course: {course_name}  force={force}")
 
-    system_prompt = pathlib.Path("tools/prompts/system.md").read_text(encoding="utf-8")
-    critic_prompt = pathlib.Path("tools/prompts/critic.md").read_text(encoding="utf-8")
+    system_prompt   = pathlib.Path("tools/prompts/system.md").read_text(encoding="utf-8")
+    critic_prompt   = pathlib.Path("tools/prompts/critic.md").read_text(encoding="utf-8")
+    summary_prompt  = pathlib.Path("tools/prompts/summary.md").read_text(encoding="utf-8")
 
     pdf_root = pathlib.Path(pdf_dir)
     pdfs = [p for p in pdf_root.rglob("*") if p.is_file() and p.suffix.lower() == ".pdf"]
@@ -230,12 +264,27 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
         chunks = chunk_pages(pages)
         print(f"[INFO] {pdf.name}: chunks={len(chunks)}")
 
-        all_cards = []
+        # 1) EXTRACT (map) : bullets locaux par chunk (pour la synthèse finale)
+        all_local_bullets: List[str] = []
+        for ch in tqdm(chunks, desc=f"Summ-Extract {pdf.name}"):
+            if len(ch["text"].strip()) < 50:
+                continue
+            api_calls += 1
+            bullets = call_llm_summary_extract(summary_prompt, ch["text"])
+            all_local_bullets.extend(bullets)
+
+        # 2) SYNTHESIZE (reduce) : résumé + “à retenir” global
+        summary_block = ""
+        if all_local_bullets:
+            api_calls += 1
+            summary_block = call_llm_summary_synthesize(summary_prompt, all_local_bullets)
+
+        # 3) Génération des cartes (avec critic + dédup)
+        all_cards: List[Dict[str,Any]] = []
         for ch in tqdm(chunks, desc=f"Gen {pdf.name}"):
             if len(ch["text"].strip()) < 50:
                 continue
             api_calls += 1
-            print(f"[INFO] Calling LLM for {pdf.name} pages {ch['pages']} (chars={len(ch['text'])})")
             raw = call_llm_generate(system_prompt, ch["text"], ch["pages"])
             for q in (raw or []):
                 qc = call_llm_critic(critic_prompt, q, ch["text"])
@@ -246,12 +295,18 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
                     except Exception:
                         keep = False
                 if keep and not DeduperSingleton.is_duplicate(q.get("question","")):
-                    q["pages"] = list(range(ch["pages"][0], ch["pages"][1]+1))
+                    q["pages"] = list(range(ch["pages'][0], ch["pages"][1]+1))
                     all_cards.append(q)
 
-        print(f"[INFO] {pdf.name}: generated {len(all_cards)} cards")
+        print(f"[INFO] {pdf.name}: generated {len(all_cards)} cards; summary={'yes' if summary_block else 'no'}")
+
         out_md = pathlib.Path(out_notes) / f"{pdf.stem}_flashcards.md"
-        write_markdown(out_md, header={"course": course_name, "source": f"{pdf}"} , cards=all_cards)
+        write_markdown(
+            out_md,
+            header={"course": course_name, "source": f"{pdf}"},
+            cards=all_cards,
+            summary_block=summary_block
+        )
 
         index[str(pdf)] = {
             "hash": file_hash,
@@ -260,6 +315,7 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
             "chunks": len(chunks),
             "cards": len(all_cards),
             "out": str(out_md),
+            "has_summary": bool(summary_block),
         }
         save_index(index, INDEX_PATH)
 
@@ -267,9 +323,9 @@ def run(pdf_dir: str, out_notes: str, course_name: str, force: bool = False):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pdf-dir", help="Dossier des PDFs", required=True)
-    ap.add_argument("--out-notes", help="Dossier de sortie Markdown", required=True)
-    ap.add_argument("--course", required=True)
+    ap.add_argument("--pdf-dir",    required=True, help="Dossier des PDFs (ex: courses/SYE/data/pdf)")
+    ap.add_argument("--out-notes",  required=True, help="Dossier de sortie Markdown (ex: courses/SYE/notes)")
+    ap.add_argument("--course",     required=True)
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
     run(args.pdf_dir, args.out_notes, args.course, force=args.force)
