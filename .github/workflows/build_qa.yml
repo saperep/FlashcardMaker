@@ -10,18 +10,20 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: flashcards-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           lfs: true
-
-      - name: List repo tree (HEAD)
-        run: |
-          git ls-tree -r --name-only HEAD | sed -n '1,200p'
+          fetch-depth: 0   # nécessaire pour une détection fiable des fichiers changés
 
       - name: Ensure LFS files are present
         run: |
@@ -29,13 +31,13 @@ jobs:
           git lfs checkout
           echo "LFS tracked:"
           git lfs ls-files -l || true
-          echo "PDFs:"
+          echo "PDFs found:"
           find courses -type f \( -iname "*.pdf" \) -printf "%p\n" 2>/dev/null || true
 
-      - name: Install Tesseract (eng+fra)
+      - name: Install system packages (Tesseract + jq)
         run: |
           sudo apt-get update
-          sudo apt-get install -y tesseract-ocr tesseract-ocr-fra
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-fra jq
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -49,26 +51,48 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
           restore-keys: ${{ runner.os }}-pip-
 
-      - name: Install deps
+      # Si tu as un requirements.txt dans le repo, remplace la ligne pip install par:
+      #   pip install -r requirements.txt
+      - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
-          pip install pymupdf Pillow pytesseract sentence-transformers faiss-cpu numpy tqdm openai genanki pymupdf4llm
+          pip install pymupdf Pillow pytesseract sentence-transformers faiss-cpu numpy tqdm openai
+
+      - name: Snapshot previous index
+        run: |
+          cp .qa_index.json .qa_index.prev.json 2>/dev/null || echo '{}' > .qa_index.prev.json
 
       - name: Detect changed courses
         id: detect
         run: |
           set -e
-          before="${{ github.event.before }}"
-          sha="${{ github.sha }}"
 
-          # Si 'before' n’est pas un commit dispo (push initial, force-push, shallow, etc.)
-          if [ -z "$before" ] || ! git cat-file -e "$before^{commit}" 2>/dev/null; then
-            echo "No usable 'before' commit; falling back to listing tracked files at HEAD."
-            changed=$(git ls-tree -r --name-only HEAD)
+          # 1) diff entre merge-base et HEAD (couvre tout le push, y compris plusieurs commits)
+          refname="${GITHUB_REF_NAME:-${GITHUB_REF##*/}}"
+          base=$(git merge-base "origin/${refname}" HEAD || true)
+          if [ -n "$base" ]; then
+            echo "Using merge-base $base"
+            changed=$(git diff --name-only "$base" HEAD)
           else
-            changed=$(git diff --name-only "$before" "$sha")
+            changed=""
           fi
 
+          # 2) fallback: payload du push (fichiers ajoutés/modifiés)
+          if [ -z "$changed" ] && [ -f "$GITHUB_EVENT_PATH" ]; then
+            echo "Falling back to event payload"
+            changed=$(jq -r '[.commits[].added[], .commits[].modified[]] | unique | .[]' "$GITHUB_EVENT_PATH" 2>/dev/null || true)
+          fi
+
+          # 3) dernier filet: fichiers du dernier commit
+          if [ -z "$changed" ]; then
+            echo "Falling back to last-commit"
+            changed=$(git show --name-only --pretty="" HEAD || true)
+          fi
+
+          echo "Changed files:"
+          echo "$changed"
+
+          # Ne garder que les PDFs sous courses/*/data/pdf
           courses=$(echo "$changed" \
             | grep -E '^courses/[^/]+/data/pdf/.*\.(pdf|PDF)$' \
             | sed -E 's@^(courses/[^/]+)/.*@\1@' \
@@ -84,14 +108,13 @@ jobs:
           } >> $GITHUB_OUTPUT
 
       - name: Generate flashcards per course
+        if: ${{ steps.detect.outputs.courses != '' }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           set -e
-          any=0
           while IFS= read -r course; do
             [ -z "$course" ] && continue
-            any=1
             cname="$(basename "$course")"
             echo ">>> Processing $cname"
             python tools/make_qa.py \
@@ -99,16 +122,40 @@ jobs:
               --pdf-dir "$course/data/pdf" \
               --out-notes "$course/notes"
           done <<< "${{ steps.detect.outputs.courses }}"
-          if [ "$any" = "0" ]; then
-            echo "No changed courses detected. Exiting."
-            exit 0
-          fi
 
       - name: Commit outputs
         run: |
           git config user.name "flashcards-bot"
           git config user.email "bot@users.noreply.github.com"
+          # Notes générées par cours + index
           find courses -type d -name notes -print0 | xargs -0 -I{} bash -lc 'git add -f "{}" || true'
           git add -f .qa_index.json || true
           git commit -m "auto: flashcards updated" || echo "nothing to commit"
-          git push
+          git push || echo "nothing to push"
+
+      - name: Summary of actual updates
+        run: |
+          # Compare .qa_index.json avant/après pour lister ce qui a vraiment changé
+          jq -r 'to_entries[] | [.key, .value.hash] | @tsv' .qa_index.prev.json  > old.tsv || true
+          jq -r 'to_entries[] | [.key, .value.hash] | @tsv' .qa_index.json       > new.tsv || true
+
+          echo "### Flashcards mises à jour" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ ! -s new.tsv ]; then
+            echo "Aucun index présent; rien à résumer." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          awk 'NR==FNR{a[$1]=$2; next} { if(!( $1 in a) || a[$1]!=$2) print $1 }' old.tsv new.tsv > changed_keys.txt
+
+          if [ ! -s changed_keys.txt ]; then
+            echo "Aucun PDF (ré)généré lors de ce run." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          while IFS= read -r k; do
+            course=$(echo "$k" | sed -E 's@^(courses/[^/]+)/.*@\1@')
+            file=$(basename "$k")
+            echo "- ✅ $course → $file" >> $GITHUB_STEP_SUMMARY
+          done < changed_keys.txt
