@@ -106,5 +106,14 @@
     "cards": 61,
     "out": "courses/GOD/notes/4-GouvernanceDonnees_Ex-Rech-Appliquee_202411_flashcards.md",
     "has_summary": true
+  },
+  "courses/PST/data/pdf/Chap3.pdf": {
+    "hash": "50b5266117f7834bf4c3165fb9d2ab499d0365b35d3ddc7dac8f7eb8f8863838",
+    "last_run": "2025-09-29T15:45:21",
+    "pages": 30,
+    "chunks": 8,
+    "cards": 35,
+    "out": "courses/PST/notes/Chap3_flashcards.md",
+    "has_summary": true
   }
 }
